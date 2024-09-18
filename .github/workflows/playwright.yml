@@ -13,7 +13,7 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Build & Install
-      run: cd PlaywrightTests && dotnet build
+      run: cd PlaywrightTests && dotnet build && dotnet tool install --global PowerShell
     - name: Ensure browsers are installed
       run: pwsh bin/Debug/net8.0/playwright.ps1 install --with-deps
     - name: Run your tests
