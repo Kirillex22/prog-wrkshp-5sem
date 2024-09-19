@@ -1,0 +1,1 @@
+dotnet test --logger "html;logfilename=testResults.html"

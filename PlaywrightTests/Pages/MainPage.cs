@@ -9,24 +9,24 @@ class MainPage : BasePage
     {
     }
 
-    public async Task fillUsername(string username)
+    public async Task FillUsername(string username)
     {
         await _page.Locator(USERNAME_FIELD).FillAsync(username);
     }
 
-    public async Task fillPassword(string password)
+    public async Task FillPassword(string password)
     {
         await _page.Locator(PASSWORD_FIELD).FillAsync(password);
     }
 
-    public async Task clickLoginButton()
+    public async Task ClickLoginButton()
     {
         await _page.Locator(LOGIN_BUTTON).ClickAsync();
     }
 
-    public ILocator getErrorMessageLocator()
+    public ILocator GetErrorMessageLocator()
     {
         return _page.Locator(ERROR_MESSAGE);
     }
 
-}//await Expect(page.Locator("[data-test=\"error\"]")).ToContainTextAsync("Epic sadface: Username and password do not match any user in this service");
+}
