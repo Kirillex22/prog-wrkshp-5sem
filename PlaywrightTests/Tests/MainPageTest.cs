@@ -1,11 +1,8 @@
-using System.Text.RegularExpressions;
-using Microsoft.Playwright;
 using Microsoft.Playwright.MSTest;
 using static PlaywrightTests.MainPageSauceConstants;
 using static PlaywrightTests.AuthConstants;
 namespace PlaywrightTests;
 
-//pwsh bin/Debug/net8.0/playwright.ps1 codegen https://www.saucedemo.com/
 [TestClass]
 public class MainPageTest : PageTest
 {
@@ -37,4 +34,3 @@ public class MainPageTest : PageTest
         await Expect(_mainPage.GetErrorMessageLocator()).ToContainTextAsync(LO_USER_ERR_MSG);
     }
 }
-//dotnet test --logger "html;logfilename=testResults.html"

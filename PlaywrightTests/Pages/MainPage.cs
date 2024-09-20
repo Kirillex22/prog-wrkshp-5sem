@@ -1,13 +1,11 @@
 using System.Threading.Tasks;
 using Microsoft.Playwright;
-using static PlaywrightTests.MainPageLocators;
+using static PlaywrightTests.SauceLocators;
 namespace PlaywrightTests;
 
 class MainPage : BasePage
 {
-    public MainPage(IPage page) : base(page)
-    {
-    }
+    public MainPage(IPage page) : base(page) { }
 
     public async Task FillUsername(string username)
     {

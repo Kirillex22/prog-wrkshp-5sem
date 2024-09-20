@@ -1,11 +1,6 @@
-using System.Text.RegularExpressions;
-using Microsoft.Playwright;
 using Microsoft.Playwright.MSTest;
-using static PlaywrightTests.MainPageSauceConstants;
-using static PlaywrightTests.AuthConstants;
 namespace PlaywrightTests;
 
-//pwsh bin/Debug/net8.0/playwright.ps1 codegen https://www.saucedemo.com/
 [TestClass]
 public class MarketPageTest : PageTest
 {
@@ -18,10 +13,14 @@ public class MarketPageTest : PageTest
     }
 
     [TestMethod]
-    public async Task SuccesfullAuth()
+    public async Task SuccesfullSortingByPriceHiLo()
     {
         await _marketPage.GotoAsync();
         await _marketPage.Auth();
+        await _marketPage.SortPrice();
+
+        var prices = await _marketPage.GetPrices();
+        var expectedList = prices.OrderByDescending(x => float.Parse(x.Trim('$').Replace('.', ',')));
+        Assert.IsTrue(expectedList.SequenceEqual(prices));
     }
 }
-//dotnet test --logger "html;logfilename=testResults.html"
