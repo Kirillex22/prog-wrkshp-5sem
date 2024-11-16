@@ -21,34 +21,33 @@ public class DeleteBookingTest : PlaywrightTest
         _baseRequest = await Playwright.APIRequest.NewContextAsync(new()
         {
             BaseURL = Data.baseUrl,
-            ExtraHTTPHeaders = new Dictionary<string, string>(){
-                {"Content-Type", "application/json"},
-                {"Cookie", $"token={Data.token}"}
-            }
+            ExtraHTTPHeaders = Data.deleteHeaders
         });
     }
 
     [TestMethod]
     public async Task SuccesfullDelete()
     {
-        var dBRequest = new DeleteBookingRequest(_baseRequest);
-        var cBRequest = new CreateBookingRequest(_baseRequest);
+        //create and send request
+        var deleteBookingRqst = new DeleteBookingRequest(_baseRequest);
+        var createBookingRqst = new CreateBookingRequest(_baseRequest);
+        var getBookingRqst = new GetBookingRequest(_baseRequest);
 
-        var response = await cBRequest.Send(Data.booking);
+        var response = await createBookingRqst.Send(Data.booking);
         var receivedJson = JsonDocument.Parse(await response.TextAsync());
+        receivedJson.RootElement.TryGetProperty("bookingid", out var bookingId);
 
+        //check status code
         await Expect(response).ToBeOKAsync();
-        Assert.IsTrue(receivedJson.RootElement.TryGetProperty("bookingid", out var bookingId));
-        Assert.IsTrue(receivedJson.RootElement.TryGetProperty("booking", out var booking));
 
-        var receivedJsonString = booking.ToString();
-        var sendedJsonString = JsonSerializer.Serialize(Data.booking);
-
-        Assert.AreEqual(receivedJsonString, sendedJsonString);
-
+        //remember id of created entit
         _dtd["id"] = bookingId;
-        response = await dBRequest.Send(_dtd);
+
+        response = await deleteBookingRqst.Send(_dtd);
         await Expect(response).ToBeOKAsync();
+
+        response = await getBookingRqst.Send(_dtd);
+        await Expect(response).Not.ToBeOKAsync();
     }
 
     [TestCleanup]
