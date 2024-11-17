@@ -47,7 +47,6 @@ public class CreateBookingTest : PlaywrightTest
         //check content
         Assert.IsTrue(receivedJson.RootElement.TryGetProperty("bookingid", out var bookingId));
         Assert.IsTrue(receivedJson.RootElement.TryGetProperty("booking", out var booking));
-
         var receivedJsonString = booking.ToString();
         var sendedJsonString = JsonSerializer.Serialize(Data.booking);
         Assert.AreEqual(receivedJsonString, sendedJsonString);

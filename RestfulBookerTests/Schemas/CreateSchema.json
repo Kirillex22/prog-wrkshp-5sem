@@ -1,11 +1,54 @@
 {
-    "firstname": "Sally",
-    "lastname": "Brown",
-    "totalprice": 111,
-    "depositpaid": true,
-    "bookingdates": {
-        "checkin": "2013-02-23",
-        "checkout": "2014-10-23"
+    "type": "object",
+    "properties": {
+        "bookingid": {
+            "type": "integer"
+        },
+        "booking": {
+            "type": "object",
+            "properties": {
+                "firstname": {
+                    "type": "string"
+                },
+                "lastname": {
+                    "type": "string"
+                },
+                "totalprice": {
+                    "type": "integer"
+                },
+                "depositpaid": {
+                    "type": "boolean"
+                },
+                "bookingdates": {
+                    "type": "object",
+                    "properties": {
+                        "checkin": {
+                            "type": "string"
+                        },
+                        "checkout": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "checkin",
+                        "checkout"
+                    ]
+                },
+                "additionalneeds": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "firstname",
+                "lastname",
+                "depositpaid",
+                "bookingdates",
+                "additionalneeds"
+            ]
+        }
     },
-    "additionalneeds": "Breakfast"
+    "required": [
+        "booking",
+        "bookingid"
+    ]
 }
