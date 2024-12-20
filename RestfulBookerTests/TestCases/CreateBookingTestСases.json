@@ -1,0 +1,89 @@
+{
+    "valid": {
+        "Good response": {
+            "expectedcode": 200,
+            "body": {
+                "firstname": "Jim",
+                "lastname": "Brown",
+                "totalprice": 111,
+                "depositpaid": true,
+                "bookingdates": {
+                    "checkin": "2018-01-01",
+                    "checkout": "2019-01-01"
+                },
+                "additionalneeds": "Breakfast"
+            }
+        },
+        "Without add needs": {
+            "expectedcode": 200,
+            "body": {
+                "firstname": "Jim",
+                "lastname": "Brown",
+                "totalprice": 111,
+                "depositpaid": true,
+                "bookingdates": {
+                    "checkin": "2018-01-01",
+                    "checkout": "2019-01-01"
+                }
+            }
+        }
+    },
+    "invalid": {
+        "Empty firstname": {
+            "expectedcode": 200,
+            "body": {
+                "firstname": "",
+                "lastname": "Brown",
+                "depositpaid": true,
+                "totalprice": 111,
+                "bookingdates": {
+                    "checkin": true,
+                    "checkout": false
+                },
+                "additionalneeds": "Breakfast"
+            }
+        },
+        "Bool checkin and checkout": {
+            "expectedcode": 200,
+            "body": {
+                "firstname": "Jim",
+                "lastname": "Brown",
+                "depositpaid": true,
+                "totalprice": 111,
+                "bookingdates": {
+                    "checkin": true,
+                    "checkout": false
+                },
+                "additionalneeds": "Breakfast"
+            }
+        },
+        "Int depositpaid": {
+            "expectedcode": 200,
+            "body": {
+                "firstname": "Jim",
+                "lastname": "Brown",
+                "totalprice": 111,
+                "depositpaid": 228,
+                "bookingdates": {
+                    "checkin": "2018-01-01",
+                    "checkout": "2019-01-01"
+                },
+                "additionalneeds": "Breakfast"
+            }
+        },
+        "Empty list totalprice": {
+            "expectedcode": 200,
+            "body": {
+                "firstname": "Jim",
+                "lastname": "Brown",
+                "totalprice": [],
+                "depositpaid": true,
+                "bookingdates": {
+                    "checkin": "2018-01-01",
+                    "checkout": "2019-01-01"
+                },
+                "additionalneeds": "Breakfast"
+            }
+        }
+    }
+}

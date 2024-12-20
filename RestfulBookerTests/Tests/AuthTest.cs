@@ -27,25 +27,20 @@ public class AuthTest : PlaywrightTest
     }
 
     [TestMethod]
-    public async Task SuccesfullAuth()
+    [DynamicData(nameof(Data.GetValidAuthCases), typeof(Data), DynamicDataSourceType.Method)]
+    public async Task ValidAuth(int expectedcode, Dictionary<string, object> authData, string caseName)
     {
         //create and send request
         var authRequest = new AuthRequest(_baseRequest);
-
-        var data = new Dictionary<string, object>(){
-            {"username", Data.username},
-            {"password", Data.password}
-        };
-
-        var response = await authRequest.Send(data);
+        var response = await authRequest.Send(authData);
         var jsonData = await response.TextAsync();
 
         //check status code
-        await Expect(response).ToBeOKAsync();
+        Assert.IsTrue(response.Status == expectedcode);
 
         //schema validating
         var json = JObject.Parse(jsonData);
-        Assert.IsTrue(json.IsValid(Data.schemas["Auth"]));
+        Assert.IsTrue(json.IsValid(Data.schemas[RequestType.Auth]));
 
         //check content
         var jsonDocument = JsonDocument.Parse(jsonData);
@@ -53,6 +48,19 @@ public class AuthTest : PlaywrightTest
 
         //set token for next tests
         Data.SetToken(token.GetString());
+    }
+
+
+    [TestMethod]
+    [DynamicData(nameof(Data.GetInvalidAuthCases), typeof(Data), DynamicDataSourceType.Method)]
+    public async Task InvalidAuth(int expectedcode, Dictionary<string, object> authData, string name)
+    {
+        //create and send request
+        var authRequest = new AuthRequest(_baseRequest);
+        var response = await authRequest.Send(authData);
+
+        //check status code
+        Assert.IsTrue(response.Status == expectedcode);
     }
 
     [TestCleanup]

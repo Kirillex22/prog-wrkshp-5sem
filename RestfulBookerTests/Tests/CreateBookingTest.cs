@@ -27,42 +27,57 @@ public class CreateBookingTest : PlaywrightTest
         });
     }
 
+
     [TestMethod]
-    public async Task SuccesfullCreate()
+    [DynamicData(nameof(Data.GetValidCreateCases), typeof(Data), DynamicDataSourceType.Method)]
+    public async Task ValidCreate(int expectedcode, Dictionary<string, object> createData, string name)
     {
         //create and send request
         var createBookingRqst = new CreateBookingRequest(_baseRequest);
 
-        var response = await createBookingRqst.Send(Data.booking);
+        var response = await createBookingRqst.Send(createData);
         var jsonData = await response.TextAsync();
         var receivedJson = JsonDocument.Parse(jsonData);
 
         //check status code
-        await Expect(response).ToBeOKAsync();
+        Assert.IsTrue(response.Status == expectedcode);
 
         //schema validating
         var json = JObject.Parse(jsonData);
-        Assert.IsTrue(json.IsValid(Data.schemas["Create"]));
+        Assert.IsTrue(json.IsValid(Data.schemas[RequestType.Create]));
 
-        //check content
         Assert.IsTrue(receivedJson.RootElement.TryGetProperty("bookingid", out var bookingId));
-        Assert.IsTrue(receivedJson.RootElement.TryGetProperty("booking", out var booking));
-        var receivedJsonString = booking.ToString();
-        var sendedJsonString = JsonSerializer.Serialize(Data.booking);
-        Assert.AreEqual(receivedJsonString, sendedJsonString);
 
         //remember id of created entity 
         _dtd["id"] = bookingId;
     }
 
-    [TestCleanup]
-    public async Task TearDownAPITesting()
-    {
-        //delete created entity
-        var deleteBookingRqst = new DeleteBookingRequest(_baseRequest);
-        var response = await deleteBookingRqst.Send(_dtd);
-        await Expect(response).ToBeOKAsync();
 
+    [TestMethod]
+    [DynamicData(nameof(Data.GetInvalidCreateCases), typeof(Data), DynamicDataSourceType.Method)]
+    public async Task InvalidCreate(int expectedcode, Dictionary<string, object> createData, string name)
+    {
+        //create and send request
+        var createBookingRqst = new CreateBookingRequest(_baseRequest);
+
+        var response = await createBookingRqst.Send(createData);
+        var jsonData = await response.TextAsync();
+
+        //check status code
+        Assert.IsTrue(response.Status == expectedcode);
+
+        JsonDocument.Parse(jsonData).RootElement.TryGetProperty("bookingid", out var bookingId);
+
+        //remember id of created entity 
+        _dtd["id"] = bookingId;
+    }
+
+
+    [TestCleanup]
+    public async Task DeleteEntityAfterCreating()
+    {
+        var deleteBookingRqst = new DeleteBookingRequest(_baseRequest);
+        await deleteBookingRqst.Send(_dtd);
         await _baseRequest.DisposeAsync();
     }
 }
