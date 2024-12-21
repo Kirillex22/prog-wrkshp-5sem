@@ -76,7 +76,7 @@
             "body": {
                 "firstname": "Jim",
                 "lastname": "Brown",
-                "totalprice": [],
+                "totalprice": 111,
                 "depositpaid": true,
                 "bookingdates": {
                     "checkin": "2018-01-01",
@@ -84,6 +84,50 @@
                 },
                 "additionalneeds": "Breakfast"
             }
+        },
+        "No firstname field": {
+            "expectedcode": 400,
+            "body": {
+                "lastname": "Brown",
+                "totalprice": 111,
+                "depositpaid": true,
+                "bookingdates": {
+                    "checkin": "2018-01-01",
+                    "checkout": "2019-01-01"
+                },
+                "additionalneeds": "Breakfast"
+            }
+        },
+        "null lastname": {
+            "expectedcode": 400,
+            "body": {
+                "firstname": "Jim",
+                "lastname": ,
+                "totalprice": 111,
+                "depositpaid": true,
+                "bookingdates": {
+                    "checkin": "2018-01-01",
+                    "checkout": "2019-01-01"
+                },
+                "additionalneeds": "Breakfast"
+            }
+        },
+        "No checkin": {
+            "expectedcode": 400,
+            "body": {
+                "firstname": "Jim",
+                "lastname": "Brown",
+                "totalprice": 111,
+                "depositpaid": true,
+                "bookingdates": {
+                    "checkout": "2019-01-01"
+                },
+                "additionalneeds": "Breakfast"
+            }
+        },
+        "empty body": {
+            "expectedcode": 400,
+            "body": {}
         }
     }
 }
