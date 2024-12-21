@@ -1,0 +1,57 @@
+{
+    "valid": {
+        "Correct username and password": {
+            "expectedcode": 200,
+            "body": {
+                "username": "admin",
+                "password": "password123"
+            }
+        }
+    },
+    "invalid": {
+        "Incorrect username": {
+            "expectedcode": 200,
+            "body": {
+                "username": "not_admin",
+                "password": "password123"
+            }
+        },
+        "Incorrect password": {
+            "expectedcode": 200,
+            "body": {
+                "username": "admin",
+                "password": "password1234"
+            }
+        },
+        "No username": {
+            "expectedcode": 200,
+            "body": {
+                "password": "password123"
+            }
+        },
+        "No password": {
+            "expectedcode": 200,
+            "body": {
+                "username": "admin"
+            }
+        },
+        "No everything": {
+            "expectedcode": 200,
+            "body": {}
+        },
+        "Empty password": {
+            "expectedcode": 200,
+            "body": {
+                "username": "admin",
+                "password": ""
+            }
+        },
+        "Empty username": {
+            "expectedcode": 200,
+            "body": {
+                "username": "",
+                "password": "password123"
+            }
+        }
+    }
+}
